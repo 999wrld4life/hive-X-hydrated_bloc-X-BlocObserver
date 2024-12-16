@@ -38,6 +38,19 @@ class MyHomePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Hive X Hydrated Bloc'),
       ),
+      body: const SafeArea(
+        child: Column(
+          children: [
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Enter your task...',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            SizedBox(height: 20),
+          ],
+        ),
+      ),
     );
   }
 }
