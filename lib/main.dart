@@ -3,10 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hive_x_hydrated_bloc_x_bloc_observer/bloc/todo_bloc.dart';
 import 'package:hive_x_hydrated_bloc_x_bloc_observer/repository/hive_repo.dart';
+import 'package:hive_x_hydrated_bloc_x_bloc_observer/simple_bloc_observer.dart';
 
 void main() async {
   await Hive.initFlutter();
   await Hive.openBox('todo');
+  Bloc.observer = SimpleBlocObserver();
   runApp(const MyApp());
 }
 
