@@ -23,14 +23,15 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: const MyHomePage(),
+        home: MyHomePage(),
       ),
     );
   }
 }
 
 class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key});
+  MyHomePage({super.key});
+  final TextEditingController _controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -41,15 +42,18 @@ class MyHomePage extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            const TextField(
-              decoration: InputDecoration(
+            TextField(
+              controller: _controller,
+              decoration: const InputDecoration(
                 labelText: 'Enter your task...',
                 border: OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 10),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                context.read<TodoBloc>().add(AddTodo(_controller.text));
+              },
               child: const Text('ADD'),
             ),
             const SizedBox(height: 20),
@@ -64,22 +68,43 @@ class MyHomePage extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                     itemCount: state.todoList.length,
                     itemBuilder: (context, index) {
+                      final task = state.todoList[index];
+                      final isFavorite = state.todoList.contains(task);
                       return ListTile(
                         title: Text(
-                          state.todoList[index],
+                          task,
                         ),
                         trailing: Row(
                           children: [
                             Expanded(
                               child: IconButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  context
+                                      .read<TodoBloc>()
+                                      .add(RemoveTodo(task));
+                                },
                                 icon: const Icon(Icons.delete),
                               ),
                             ),
                             Expanded(
                               child: IconButton(
-                                onPressed: () {},
-                                icon: const Icon(Icons.favorite_border),
+                                onPressed: () {
+                                  if (isFavorite) {
+                                    context
+                                        .read<TodoBloc>()
+                                        .add(RemoveTodoFavorite(task));
+                                  } else {
+                                    context
+                                        .read<TodoBloc>()
+                                        .add(AddTodoFavorite(task));
+                                  }
+                                },
+                                icon: isFavorite
+                                    ? const Icon(
+                                        Icons.favorite,
+                                        color: Colors.red,
+                                      )
+                                    : const Icon(Icons.favorite_border),
                               ),
                             ),
                           ],
