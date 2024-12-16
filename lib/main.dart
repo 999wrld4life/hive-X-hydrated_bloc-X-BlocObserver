@@ -38,16 +38,61 @@ class MyHomePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Hive X Hydrated Bloc'),
       ),
-      body: const SafeArea(
+      body: SafeArea(
         child: Column(
           children: [
-            TextField(
+            const TextField(
               decoration: InputDecoration(
                 labelText: 'Enter your task...',
                 border: OutlineInputBorder(),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () {},
+              child: const Text('ADD'),
+            ),
+            const SizedBox(height: 20),
+            BlocBuilder(
+              builder: (context, state) {
+                if (state is TodoLoading) {
+                  const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (state is TodoLoaded) {
+                  ListView.builder(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    itemCount: state.todoList.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text(
+                          state.todoList[index],
+                        ),
+                        trailing: Row(
+                          children: [
+                            Expanded(
+                              child: IconButton(
+                                onPressed: () {},
+                                icon: const Icon(Icons.delete),
+                              ),
+                            ),
+                            Expanded(
+                              child: IconButton(
+                                onPressed: () {},
+                                icon: const Icon(Icons.favorite_border),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                }
+                return const Center(
+                  child: Text("No Task"),
+                );
+              },
+            ),
           ],
         ),
       ),
